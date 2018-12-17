@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tip.restful.dealPublish.api.dao.EfBnDealGradeMapper">
+    <resultMap id="DealGradeMap" type="com.tip.restful.dealPublish.api.entity.DealGrade">
+        <id column="DEAL_ID" property="dealId"/>
+        <result column="APPLY_ID" property="applyId"/>
+        <result column="EXPORT_PROPORTION" property="exportProportion"/>
+        <result column="EXPORT_MARK" property="exportMark"/>
+        <result column="DEAL_MARK" property="dealMark"/>
+        <result column="INDUSTRY_DISCIPLINE_MARK" property="industryDisciplineMark"/>
+        <result column="BRAND_MARK" property="brandMark"/>
+        <result column="PATENT_COPYRIGHT_MARK" property="patentCopyrightMark"/>
+        <result column="HIGH_TECH_MARK" property="highTechMark"/>
+        <result column="INDUSTRY_STANDARD_MARK" property="industryStandardMark"/>
+        <result column="QUALITY_ENV_MANA_MARK" property="qualityEnvManaMark"/>
+        <result column="INDUSTRY_CERTIFICATION_MARK" property="industryCertificationMark"/>
+        <result column="PRODUCTS_INDUSTRY_MARK" property="productsIndustryMark"/>
+        <result column="DOMESTIC_TRADEMARK_MARK" property="domesticTrademarkMark"/>
+        <result column="OVERSEA_TRADEMARK_MARK" property="overseaTrademarkMark"/>
+        <result column="IS_STANDARD" jdbcType="DECIMAL" property="isStandard"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from ef_bn_deal_grade
+        where DEAL_ID = #{dealId}
+    </delete>
+    <insert id="insert" parameterType="com.tip.restful.dealPublish.api.entity.DealGrade">
+        insert into ef_bn_deal_grade (APPLY_ID,
+                                      EXPORT_PROPORTION,
+                                      EXPORT_MARK,
+                                      DEAL_MARK,
+                                      BRAND_MARK,
+                                      INDUSTRY_DISCIPLINE_MARK,
+                                      PATENT_COPYRIGHT_MARK,
+                                      HIGH_TECH_MARK,
+                                      INDUSTRY_STANDARD_MARK,
+                                      QUALITY_ENV_MANA_MARK,
+                                      INDUSTRY_CERTIFICATION_MARK,
+                                      PRODUCTS_INDUSTRY_MARK,
+                                      DOMESTIC_TRADEMARK_MARK,
+                                      OVERSEA_TRADEMARK_MARK,
+                                      IS_STANDARD)
+        values (#{applyId},
+                #{exportProportion},
+                #{exportMark},
+                #{dealMark},
+                #{brandMark},
+                #{industryDisciplineMark},
+                #{patentCopyrightMark},
+                #{highTechMark},
+                #{industryStandardMark},
+                #{qualityEnvManaMark},
+                #{industryCertificationMark},
+                #{productsIndustryMark},
+                #{domesticTrademarkMark},
+                #{overseaTrademarkMark},
+                #{isStandard})
+    </insert>
+    <select id="selectByApplyId" parameterType="java.lang.String" resultType="String">
+        select DEAL_MARK
+        from ef_bn_deal_grade
+        where APPLY_ID = #{applyId}
+    </select>
+    <select id="selectAll" resultMap="DealGradeMap">
+        select DEAL_ID,
+               EXPORT_PROPORTION,
+               EXPORT_MARK,
+               DEAL_MARK,
+               BRAND_MARK,
+               PATENT_COPYRIGHT_MARK,
+               HIGH_TECH_MARK,
+               INDUSTRY_STANDARD_MARK,
+               QUALITY_ENV_MANA_MARK,
+               INDUSTRY_CERTIFICATION_MARK,
+               PRODUCTS_INDUSTRY_MARK,
+               DOMESTIC_TRADEMARK_MARK,
+               OVERSEA_TRADEMARK_MARK,
+               IS_STANDARD
+        from ef_bn_deal_grade
+    </select>
+</mapper>

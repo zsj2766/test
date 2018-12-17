@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tip.restful.dealPublish.api.dao.EfBnApplyNumberMapper">
+    <resultMap id="ApplyNumberMap" type="com.tip.restful.dealPublish.api.entity.ApplyNumber">
+        <id column="APPLY_ID" property="applyId"/>
+        <result column="COMPANY_NAME" property="companyName"/>
+        <result column="COMPANY_TYPE" property="companyType"/>
+        <result column="COMPANY_ATTR" property="companyAttr"/>
+        <result column="AREA" property="area"/>
+        <result column="EXHIBITION_SESSION" property="exhibitionSession"/>
+        <result column="EXHIBITION_AREA" property="exhibitionArea"/>
+        <result column="APPLY_NUMBER" property="applyNumber"/>
+        <result column="CBCF_CODE" property="cbcfCode"/>
+        <result column="DEAL_NAME" property="dealName"/>
+        <result column="IS_RECOMMEND" property="isRecommend"/>
+        <result column="AUDIT_SITUATION" property="auditSituation"/>
+    </resultMap>
+    <insert id="insertApply" parameterType="com.tip.restful.dealPublish.api.entity.ApplyNumber">
+        insert into ef_bn_apply_number (COMPANY_NAME,
+                                        COMPANY_TYPE,
+                                        COMPANY_ATTR,
+                                        AREA,
+                                        EXHIBITION_SESSION,
+                                        EXHIBITION_AREA,
+                                        APPLY_NUMBER,
+                                        CBCF_CODE,
+                                        DEAL_NAME,
+                                        IS_RECOMMEND,
+                                        AUDIT_SITUATION)
+        values (#{companyName},
+                #{companyType},
+                #{companyAttr},
+                #{area},
+                #{exhibitionSession},
+                #{exhibitionArea},
+                #{applyNumber},
+                #{cbcfCode},
+                #{dealName},
+                #{isRecommend},
+                #{auditSituation})
+    </insert>
+
+    <update id="updateByName" parameterType="com.tip.restful.dealPublish.api.entity.ApplyNumber">
+        update ef_bn_apply_number
+        set IS_RECOMMEND    = #{isRecommend},
+            AUDIT_SITUATION = #{auditSituation}
+        where APPLY_ID = #{applyId}
+    </update>
+    <select id="selectByApplyId" parameterType="java.lang.String" resultMap="ApplyNumberMap">
+        select APPLY_ID,
+               COMPANY_NAME,
+               COMPANY_TYPE,
+               COMPANY_ATTR,
+               AREA,
+               EXHIBITION_SESSION,
+               EXHIBITION_AREA,
+               APPLY_NUMBER,
+               CBCF_CODE,
+               DEAL_NAME,
+               IS_RECOMMEND,
+               AUDIT_SITUATION
+        from ef_bn_apply_number
+        where APPLY_ID = #{applyId}
+    </select>
+    <select id="selectAll" resultMap="ApplyNumberMap">
+        select APPLY_ID,
+               COMPANY_NAME,
+               COMPANY_TYPE,
+               COMPANY_ATTR,
+               AREA,
+               EXHIBITION_SESSION,
+               EXHIBITION_AREA,
+               APPLY_NUMBER,
+               CBCF_CODE,
+               DEAL_NAME,
+               IS_RECOMMEND,
+               AUDIT_SITUATION
+        from ef_bn_apply_number
+    </select>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tip.restful.dealPublish.api.dao.EfBnBrandPublishMapper">
+    <resultMap id="BrandPublishMap" type="com.tip.restful.dealPublish.api.entity.BrandPublish">
+        <id column="PUBLISH_ID" property="publishId"/>
+        <result column="COMPANY_NAME" property="companyName"/>
+        <result column="COMPANY_TYPE" property="companyType"/>
+        <result column="COMPANY_ATTR" property="companyAttr"/>
+        <result column="LAST_APPLY_NUMBER" property="lastApplyNumber"/>
+        <result column="AREA" property="area"/>
+        <result column="EXHIBITION_SESSION" property="exhibitionSession"/>
+        <result column="EXHIBITION_AREA" property="exhibitionArea"/>
+        <result column="APPLY_NUMBER" property="applyNumber"/>
+        <result column="CBCF_CODE" property="cbcfCode"/>
+        <result column="DEAL_NAME" property="dealName"/>
+        <association property="dealGrade" column="deal_id"
+                     javaType="com.tip.restful.dealPublish.api.entity.DealGrade" resultMap="DealGradeMap"/>
+    </resultMap>
+
+    <resultMap id="DealGradeMap" type="com.tip.restful.dealPublish.api.entity.DealGrade">
+        <id column="DEAL_ID" property="dealId"/>
+        <result column="APPLY_ID" property="applyId"/>
+        <result column="EXPORT_PROPORTION" property="exportProportion"/>
+        <result column="EXPORT_MARK" property="exportMark"/>
+        <result column="DEAL_MARK" property="dealMark"/>
+        <result column="BRAND_MARK" property="brandMark"/>
+        <result column="PATENT_COPYRIGHT_MARK" property="patentCopyrightMark"/>
+        <result column="HIGH_TECH_MARK" property="highTechMark"/>
+        <result column="INDUSTRY_STANDARD_MARK" property="industryStandardMark"/>
+        <result column="QUALITY_ENV_MANA_MARK" property="qualityEnvManaMark"/>
+        <result column="INDUSTRY_CERTIFICATION_MARK" property="industryCertificationMark"/>
+        <result column="PRODUCTS_INDUSTRY_MARK" property="productsIndustryMark"/>
+        <result column="DOMESTIC_TRADEMARK_MARK" property="domesticTrademarkMark"/>
+        <result column="OVERSEA_TRADEMARK_MARK" property="overseaTrademarkMark"/>
+        <result column="IS_STANDARD" property="isStandard"/>
+    </resultMap>
+
+
+    <resultMap id="ApplyNumberMap" type="com.tip.restful.dealPublish.api.entity.ApplyNumber">
+        <id column="APPLY_ID" property="applyId"/>
+        <result column="COMPANY_NAME" property="companyName"/>
+        <result column="COMPANY_TYPE" property="companyType"/>
+        <result column="COMPANY_ATTR" property="companyAttr"/>
+        <result column="AREA" property="area"/>
+        <result column="EXHIBITION_SESSION" property="exhibitionSession"/>
+        <result column="EXHIBITION_AREA" property="exhibitionArea"/>
+        <result column="APPLY_NUMBER" property="applyNumber"/>
+        <result column="CBCF_CODE" property="cbcfCode"/>
+        <result column="DEAL_NAME" property="dealName"/>
+        <result column="IS_RECOMMEND" jdbcType="DECIMAL" property="isRecommend"/>
+        <result column="AUDIT_SITUATION" jdbcType="DECIMAL" property="auditSituation"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.tip.restful.dealPublish.api.entity.ApplyNumber">
+        insert into ef_bn_brand_publish (COMPANY_NAME,
+                                         AREA,
+                                         EXHIBITION_SESSION,
+                                         EXHIBITION_AREA,
+                                         APPLY_NUMBER,
+                                         CBCF_CODE,
+                                         DEAL_NAME)
+        values (#{companyName},
+                #{area},
+                #{exhibitionSession},
+                #{exhibitionArea},
+                #{applyNumber},
+                #{cbcfCode},
+                #{dealName})
+    </insert>
+
+    <select id="selectByConditions" resultMap="BrandPublishMap">
+        select bp.PUBLISH_ID,
+        am.COMPANY_NAME,
+        am.COMPANY_TYPE,
+        am.COMPANY_ATTR,
+        bp.AREA,
+        bp.EXHIBITION_AREA,
+        bp.APPLY_NUMBER,
+        bp.DEAL_NAME,
+        dg.DEAL_MARK,
+        lbp.LAST_APPLY_NUMBER as LAST_APPLY_NUMBER
+        from ef_bn_brand_publish bp
+        left join ef_bn_apply_number am on bp.COMPANY_NAME = am.COMPANY_NAME
+        left join ef_bn_deal_grade dg on am.APPLY_ID = dg.APPLY_ID
+        left join (select COMPANY_NAME,APPLY_NUMBER LAST_APPLY_NUMBER from ef_bn_brand_publish where EXHIBITION_SESSION
+        =
+        #{exhibitionSession}-1) lbp on lbp.COMPANY_NAME = bp.COMPANY_NAME where 1 = 1 and am.AUDIT_SITUATION = 1
+        <if test="exhibitionSession != null and '' neq exhibitionSession">
+            and am.EXHIBITION_SESSION = #{exhibitionSession}
+        </if>
+        <if test="exhibitionArea != null and '' neq exhibitionArea">
+            and am.EXHIBITION_AREA = #{exhibitionArea}
+        </if>
+        <if test="isrecommend != null and '' neq isrecommend">
+            and am.IS_RECOMMEND = #{isrecommend}
+        </if>
+    </select>
+</mapper>
